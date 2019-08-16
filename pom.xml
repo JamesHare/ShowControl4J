@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.showcontrol4j</groupId>
+    <artifactId>showcontrol4j</artifactId>
+    <version>1.0.0-SNAPSHOT-SCFJ-10001</version>
+    <modules>
+        <module>showcontrol4j-core</module>
+    </modules>
+    <packaging>pom</packaging>
+    <name>ShowControl4J</name>
+    <description>A Java library for controlling show elements with Raspberry Pi</description>
+
+</project>

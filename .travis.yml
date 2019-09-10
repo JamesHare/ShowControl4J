@@ -7,7 +7,7 @@ addons:
   apt:
     packages:
       - rabbitmq-server
-script: mvn clean install
+script: travis_wait 20 mvn clean install
 after_success:
   - travis_wait 20 mvn clean test jacoco:report coveralls:report -q
 cache:

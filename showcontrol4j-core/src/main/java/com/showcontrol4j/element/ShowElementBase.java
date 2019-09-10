@@ -38,7 +38,7 @@ public abstract class ShowElementBase implements ShowElement {
      * @param messageQueue a {@link MessageQueue} object. Must not be null.
      * @param brokerConnectionFactory a {@link BrokerConnectionFactory} object. Must not be null.
      */
-    public ShowElementBase(MessageQueue messageQueue, BrokerConnectionFactory brokerConnectionFactory) {
+    public ShowElementBase(final MessageQueue messageQueue, final BrokerConnectionFactory brokerConnectionFactory) {
         if (messageQueue == null) {
             throw new NullMessageQueueException();
         } else if (brokerConnectionFactory == null) {

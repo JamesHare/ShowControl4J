@@ -21,8 +21,8 @@ import static org.junit.Assert.assertThat;
  */
 public class TestShowElementBase {
 
-    MessageQueue messageQueue;
-    BrokerConnectionFactory brokerConnectionFactory;
+    private MessageQueue messageQueue;
+    private BrokerConnectionFactory brokerConnectionFactory;
     @Rule
     public ExpectedException exception = ExpectedException.none();
 

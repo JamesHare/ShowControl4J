@@ -15,8 +15,8 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 /**
- * A helper class with static methods to allow for the encryption and decryption of {@link SCFJMessage}
- * objects.
+ * A helper class with static methods to allow for the encryption and decryption of a
+ * {@link SCFJMessage} object.
  *
  * @author James Hare
  */
@@ -24,6 +24,7 @@ public class MessageCipher {
 
     /**
      * Encrypts a {@link SCFJMessage} to an encrypted String.
+     *
      * @param scfjMessage a {@link SCFJMessage} object.
      * @return {@link String} a {@link SCFJMessage} object encrypted as a String.
      * @throws NoSuchAlgorithmException
@@ -38,7 +39,7 @@ public class MessageCipher {
             NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException,
             UnsupportedEncodingException, InvalidAlgorithmParameterException {
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
-        String encryptionKey = "ABCDEFGHIJKLMNOP";
+        final String encryptionKey = "ABCDEFGHIJKLMNOP";
         byte[] key = encryptionKey.getBytes("UTF-8");
         SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
         IvParameterSpec ivparameterspec = new IvParameterSpec(key);
@@ -50,6 +51,7 @@ public class MessageCipher {
 
     /**
      * Encrypts a {@link SCFJMessage} as a String to an encrypted String.
+     *
      * @param scfjMessageAsString A {@link SCFJMessage} object as a String.
      * @return {@link String} a {@link SCFJMessage} object encrypted as a String.
      * @throws NoSuchAlgorithmException
@@ -64,7 +66,7 @@ public class MessageCipher {
             NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException,
             UnsupportedEncodingException, InvalidAlgorithmParameterException {
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
-        String encryptionKey = "ABCDEFGHIJKLMNOP";
+        final String encryptionKey = "ABCDEFGHIJKLMNOP";
         byte[] key = encryptionKey.getBytes("UTF-8");
         SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
         IvParameterSpec ivparameterspec = new IvParameterSpec(key);
@@ -76,6 +78,7 @@ public class MessageCipher {
 
     /**
      * Decrypts an encrypted {@link SCFJMessage} object as a String to a {@link SCFJMessage} object.
+     *
      * @param encryptedMessage a {@link SCFJMessage} object.
      * @return a {@link SCFJMessage} object.
      * @throws NoSuchAlgorithmException
@@ -90,7 +93,7 @@ public class MessageCipher {
             NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException,
             UnsupportedEncodingException, InvalidAlgorithmParameterException {
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
-        String encryptionKey = "ABCDEFGHIJKLMNOP";
+        final String encryptionKey = "ABCDEFGHIJKLMNOP";
         byte[] key = encryptionKey.getBytes("UTF-8");
         SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
         IvParameterSpec ivparameterspec = new IvParameterSpec(key);
@@ -108,6 +111,7 @@ public class MessageCipher {
     /**
      * Decrypts an encrypted {@link SCFJMessage} object as a String to a {@link SCFJMessage} object
      * as a String.
+     *
      * @param encryptedMessage {@link String} a {@link SCFJMessage} object as a String.
      * @return
      * @throws NoSuchAlgorithmException
@@ -122,7 +126,7 @@ public class MessageCipher {
             NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException,
             UnsupportedEncodingException, InvalidAlgorithmParameterException {
         Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
-        String encryptionKey = "ABCDEFGHIJKLMNOP";
+        final String encryptionKey = "ABCDEFGHIJKLMNOP";
         byte[] key = encryptionKey.getBytes("UTF-8");
         SecretKeySpec secretKey = new SecretKeySpec(key, "AES");
         IvParameterSpec ivparameterspec = new IvParameterSpec(key);

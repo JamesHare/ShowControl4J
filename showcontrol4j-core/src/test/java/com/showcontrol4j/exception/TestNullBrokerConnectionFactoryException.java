@@ -3,7 +3,8 @@ package com.showcontrol4j.exception;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 /**
  * A class to test the {@link NullBrokerConnectionFactoryException}.
@@ -12,23 +13,15 @@ import static org.junit.Assert.*;
  */
 public class TestNullBrokerConnectionFactoryException {
 
-    /**
-     * A test to ensure that the {@link NullBrokerConnectionFactoryException} default constructor
-     * creates the object and that the message remains null.
-     */
     @Test
-    public void testNullBrokerConnectionFactoryException() {
+    public void testConstructor() {
         NullBrokerConnectionFactoryException exception = new NullBrokerConnectionFactoryException();
         assertThat(exception, instanceOf(NullBrokerConnectionFactoryException.class));
         assertEquals("Broker Connection Factory cannot be null.", exception.getMessage());
     }
 
-    /**
-     * A test to ensure that the {@link NullBrokerConnectionFactoryException} constructor creates the
-     * exception with a custom message.
-     */
     @Test
-    public void testNullBrokerConnectionFactoryExceptionWithMessage() {
+    public void testConstructor_withMessage() {
         NullBrokerConnectionFactoryException exception = new NullBrokerConnectionFactoryException("Test message.");
         assertThat(exception, instanceOf(NullBrokerConnectionFactoryException.class));
         assertEquals("Test message.", exception.getMessage());

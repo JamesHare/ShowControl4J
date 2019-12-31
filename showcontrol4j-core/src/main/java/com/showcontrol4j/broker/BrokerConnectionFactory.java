@@ -2,7 +2,7 @@ package com.showcontrol4j.broker;
 
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.ConnectionFactory;
-import com.showcontrol4j.exception.NullHostBrokerException;
+import com.showcontrol4j.exception.NullBrokerHostException;
 
 import java.io.IOException;
 import java.util.concurrent.TimeoutException;
@@ -14,34 +14,36 @@ import java.util.concurrent.TimeoutException;
  */
 public class BrokerConnectionFactory {
 
-    private ConnectionFactory connectionFactory;
-    private String hostname;
+    private final ConnectionFactory CONNECTION_FACTORY;
+    private final String HOSTNAME;
 
     private BrokerConnectionFactory(Builder builder) {
-        if (builder.hostname == null) {
-            throw new NullHostBrokerException();
+        if (builder.HOSTNAME == null) {
+            throw new NullBrokerHostException();
         }
-        hostname = builder.hostname;
-        connectionFactory = new ConnectionFactory();
-        connectionFactory.setHost(hostname);
+        HOSTNAME = builder.HOSTNAME;
+        CONNECTION_FACTORY = new ConnectionFactory();
+        CONNECTION_FACTORY.setHost(HOSTNAME);
     }
 
     /**
      * Returns the hostname of the Broker Connection Factory.
+     *
      * @return {@link String} the hostname of the Broker Connection Factory.
      */
     public String getHostname() {
-        return hostname;
+        return HOSTNAME;
     }
 
     /**
-     * Returns a new connection from the Broker Connection Facotry.
-     * @return {@link Connection} a new connection from the Broker Connection Facotry.
+     * Returns a new connection from the Broker Connection Factory.
+     *
+     * @return {@link Connection} a new connection from the Broker Connection Factory.
      * @throws IOException
      * @throws TimeoutException
      */
     public Connection newConnection() throws IOException, TimeoutException {
-        return connectionFactory.newConnection();
+        return CONNECTION_FACTORY.newConnection();
     }
 
     /**
@@ -49,25 +51,28 @@ public class BrokerConnectionFactory {
      */
     public static class Builder {
 
-        private String hostname;
+        private String HOSTNAME;
 
         /**
          * Constructor
          */
-        public Builder(){}
+        public Builder() {
+        }
 
         /**
          * Sets the hostname of the {@link BrokerConnectionFactory}.
+         *
          * @param hostname the hostname of the {@link BrokerConnectionFactory}. Must not be null.
          * @return the Builder object.
          */
         public Builder withHostname(String hostname) {
-            this.hostname = hostname;
+            this.HOSTNAME = hostname;
             return this;
         }
 
         /**
          * Builds the {@link BrokerConnectionFactory} object with the builder.
+         *
          * @return the {@link BrokerConnectionFactory} object.
          */
         public BrokerConnectionFactory build() {

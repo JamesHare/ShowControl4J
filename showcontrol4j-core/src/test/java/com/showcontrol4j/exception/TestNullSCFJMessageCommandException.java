@@ -3,7 +3,8 @@ package com.showcontrol4j.exception;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 /**
  * A class to test the {@link NullSCFJMessageCommandException}.
@@ -12,23 +13,15 @@ import static org.junit.Assert.*;
  */
 public class TestNullSCFJMessageCommandException {
 
-    /**
-     * A test to ensure that the {@link NullSCFJMessageCommandException} default constructor
-     * creates the object and that the message remains null.
-     */
     @Test
-    public void testNullSCFJMessageCommandException() {
+    public void testConstructor() {
         NullSCFJMessageCommandException exception = new NullSCFJMessageCommandException();
         assertThat(exception, instanceOf(NullSCFJMessageCommandException.class));
         assertEquals("SCFJMessage command cannot be null.", exception.getMessage());
     }
 
-    /**
-     * A test to ensure that the {@link NullSCFJMessageCommandException} constructor creates the
-     * exception with a custom message.
-     */
     @Test
-    public void testNullSCFJMessageCommandExceptionWithMessage() {
+    public void testConstructor_withMessage() {
         NullSCFJMessageCommandException exception = new NullSCFJMessageCommandException("Test message.");
         assertThat(exception, instanceOf(NullSCFJMessageCommandException.class));
         assertEquals("Test message.", exception.getMessage());

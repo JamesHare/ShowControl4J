@@ -1,13 +1,13 @@
 package com.showcontrol4j.message;
 
 import com.showcontrol4j.exception.NullSCFJMessageCommandException;
-import com.showcontrol4j.exception.NullSCFJMessageStartTimeException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 /**
  * Test for the {@link SCFJMessage} class.
@@ -21,38 +21,41 @@ public class TestSCFJMessage {
     @Rule
     public ExpectedException exception = ExpectedException.none();
 
-    /**
-     * A test to ensure that the {@link SCFJMessage} builder works with valid input.
-     */
     @Test
-    public void testSCFJMessageWithValidInput() {
+    public void testConstructor() {
         SCFJMessage testSCFJMessage = new SCFJMessage.Builder().withCommand(testCommand).withStartTime(testTime).build();
         assertThat(testSCFJMessage, instanceOf(SCFJMessage.class));
-        assertEquals(testCommand, testSCFJMessage.getCommand());
-        assertEquals(testTime, testSCFJMessage.getStartTime());
-        assertEquals("TEST:1234567891234", testSCFJMessage.toString());
     }
 
-    /**
-     * A test to ensure that {@link NullSCFJMessageCommandException} is thrown when the SCFJMessage command
-     * is null in the {@link SCFJMessage} constructor.
-     */
     @Test
-    public void testNullSCFJMessageCommandExceptionThrownWhenSCFJMessageCommandIsNull() {
+    public void testConstructor_nullCommand() {
         exception.expect(NullSCFJMessageCommandException.class);
         exception.expectMessage("SCFJMessage command cannot be null.");
-        SCFJMessage testSCFJMessage = new SCFJMessage.Builder().withCommand(null).withStartTime(testTime).build();
+        SCFJMessage testSCFJMessage = new SCFJMessage.Builder().withStartTime(testTime).build();
     }
 
-    /**
-     * A test to ensure that {@link NullSCFJMessageStartTimeException} is thrown when the SCFJMessage
-     * start time is null in the {@link SCFJMessage} constructor.
-     */
     @Test
-    public void testNullSCFJMessageStartTimeExceptionThrownWhenSCFJMessageStartTimeIsNull() {
-        exception.expect(NullSCFJMessageStartTimeException.class);
-        exception.expectMessage("SCFJMessage start time cannot be null.");
-        SCFJMessage testSCFJMessage = new SCFJMessage.Builder().withCommand(testCommand).withStartTime(null).build();
+    public void testConstructor_nullStartTime() {
+        SCFJMessage testSCFJMessage = new SCFJMessage.Builder().withCommand(testCommand).build();
+        assertThat(testSCFJMessage.getStartTime(), instanceOf(Long.class));
+    }
+
+    @Test
+    public void testGetCommand() {
+        SCFJMessage testSCFJMessage = new SCFJMessage.Builder().withCommand(testCommand).withStartTime(testTime).build();
+        assertEquals(testCommand, testSCFJMessage.getCommand());
+    }
+
+    @Test
+    public void testGetStartTime() {
+        SCFJMessage testSCFJMessage = new SCFJMessage.Builder().withCommand(testCommand).withStartTime(testTime).build();
+        assertEquals(testTime, testSCFJMessage.getStartTime());
+    }
+
+    @Test
+    public void testToString() {
+        SCFJMessage testSCFJMessage = new SCFJMessage.Builder().withCommand(testCommand).withStartTime(testTime).build();
+        assertEquals("TEST:1234567891234", testSCFJMessage.toString());
     }
 
 }

@@ -8,9 +8,34 @@
     <version>1.0.0-SNAPSHOT</version>
     <modules>
         <module>showcontrol4j-core</module>
+        <module>showcontrol4j-trigger</module>
+        <module>showcontrol4j-element</module>
     </modules>
     <packaging>pom</packaging>
     <name>ShowControl4J</name>
-    <description>A Java library for controlling show elements with Raspberry Pi</description>
-
+    <description>A Java library for controlling show elements with a variety of microcontrollers</description>
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>cobertura-maven-plugin</artifactId>
+                    <version>2.2</version>
+                    <configuration>
+                        <formats>
+                            <format>xml</format>
+                        </formats>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>cobertura</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>

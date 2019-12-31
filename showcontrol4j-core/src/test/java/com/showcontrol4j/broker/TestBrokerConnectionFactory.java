@@ -1,17 +1,23 @@
 package com.showcontrol4j.broker;
 
 import com.rabbitmq.client.Connection;
-import com.showcontrol4j.exception.NullHostBrokerException;
+import com.rabbitmq.client.ConnectionFactory;
+import com.showcontrol4j.exception.NullBrokerHostException;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.concurrent.TimeoutException;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
 /**
  * Test for the {@link BrokerConnectionFactory} class.
@@ -22,38 +28,56 @@ public class TestBrokerConnectionFactory {
 
     @Rule
     public ExpectedException exception = ExpectedException.none();
-    private final String HOSTNAME = "localhost";
+    private final String HOSTNAME = "test";
 
-    /**
-     * Test to ensure that {@link BrokerConnectionFactory} builder works with valid input.
-     */
+    @Mock
+    ConnectionFactory mockConnectionFactory;
+    @Mock
+    Connection mockConnection;
+
+    @Before
+    public void init() {
+        MockitoAnnotations.initMocks(this);
+    }
+
     @Test
-    public void testBrokerConnectionFactoryWithValidInput() {
+    public void testConstructor() {
         BrokerConnectionFactory testBrokerConnectionFactory = new BrokerConnectionFactory.Builder()
-                .withHostname(HOSTNAME)
-                .build();
+                .withHostname(HOSTNAME).build();
+        assertThat(testBrokerConnectionFactory, instanceOf(BrokerConnectionFactory.class));
+    }
+
+    @Test
+    public void testConstructor_nullHostname() {
+        exception.expect(NullBrokerHostException.class);
+        exception.expectMessage("Broker hostname cannot be null.");
+        BrokerConnectionFactory testBrokerConnectionFactory = new BrokerConnectionFactory.Builder().build();
+    }
+
+    @Test
+    public void testGetHostname() {
+        BrokerConnectionFactory testBrokerConnectionFactory = new BrokerConnectionFactory.Builder()
+                .withHostname(HOSTNAME).build();
+        assertEquals(HOSTNAME, testBrokerConnectionFactory.getHostname());
+    }
+
+    @Test
+    public void testNewConnection() throws Exception {
+        BrokerConnectionFactory testBrokerConnectionFactory = new BrokerConnectionFactory.Builder()
+                .withHostname(HOSTNAME).build();
+        Field connectionFactoryField = testBrokerConnectionFactory.getClass().getDeclaredField("CONNECTION_FACTORY");
+        connectionFactoryField.setAccessible(true);
+        connectionFactoryField.set(testBrokerConnectionFactory, mockConnectionFactory);
+        when(mockConnectionFactory.newConnection()).thenReturn(mockConnection);
+
         Connection testConnection = null;
         try {
             testConnection = testBrokerConnectionFactory.newConnection();
         } catch (IOException | TimeoutException e) {
             System.out.println("An error occurred while getting a new connection. " + e);
         }
-        assertThat(testBrokerConnectionFactory, instanceOf(BrokerConnectionFactory.class));
-        assertEquals(HOSTNAME, testBrokerConnectionFactory.getHostname());
-        assertThat(testConnection, instanceOf(Connection.class));
-    }
 
-    /**
-     * Test to ensure that {@link NullHostBrokerException} is thrown when the hostname is null
-     * in the {@link BrokerConnectionFactory} builder.
-     */
-    @Test
-    public void testBrokerConnectionFactoryWithNullHostName() {
-        exception.expect(NullHostBrokerException.class);
-        exception.expectMessage("Broker hostname cannot be null.");
-        BrokerConnectionFactory testBrokerConnectionFactory = new BrokerConnectionFactory.Builder()
-                .withHostname(null)
-                .build();
+        assertThat(testConnection, instanceOf(Connection.class));
     }
 
 }

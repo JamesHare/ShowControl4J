@@ -27,9 +27,6 @@ public class TestMessageCipher {
             .withCommand("TEST")
             .withStartTime(1234567891234L).build();
 
-    /**
-     * Tests the functionality to encrypt a {@link SCFJMessage} to a String.
-     */
     @Test
     public void testEncryptMessageToString() {
         String testEncryptedMessageString = null;
@@ -42,9 +39,6 @@ public class TestMessageCipher {
         assertEquals("e0FMINTSH1780MOGuiFJ1QI6j9INeLHE3Qoq+hkIF1k=", testEncryptedMessageString);
     }
 
-    /**
-     * Tests the functionality to encrypt a {@link SCFJMessage} String to a String.
-     */
     @Test
     public void testEncryptMessageStringToString() {
         String testEncryptedMessageString = null;
@@ -57,9 +51,6 @@ public class TestMessageCipher {
         assertEquals("e0FMINTSH1780MOGuiFJ1QI6j9INeLHE3Qoq+hkIF1k=", testEncryptedMessageString);
     }
 
-    /**
-     * Tests the functionality to decrypt a String to a {@link SCFJMessage}.
-     */
     @Test
     public void testDecryptStringToMessage() {
         String testDecryptedMessageString = null;
@@ -72,9 +63,6 @@ public class TestMessageCipher {
         assertEquals(TEST_MESSAGE_STRING, testDecryptedMessageString);
     }
 
-    /**
-     * Tests the functionality to decrypt a String to a {@link SCFJMessage} String.
-     */
     @Test
     public void testDecryptStringToMessageString() {
         SCFJMessage testDecryptedMessage = null;

@@ -1,7 +1,6 @@
 package com.showcontrol4j.message;
 
 import com.showcontrol4j.exception.NullSCFJMessageCommandException;
-import com.showcontrol4j.exception.NullSCFJMessageStartTimeException;
 
 /**
  * Serves as a class for a SCFJMessage POJO.
@@ -10,21 +9,20 @@ import com.showcontrol4j.exception.NullSCFJMessageStartTimeException;
  */
 public class SCFJMessage {
 
-    private String command;
-    private Long startTime;
+    private final String command;
+    private final Long startTime;
 
     private SCFJMessage(Builder builder) {
         if (builder.command == null) {
             throw new NullSCFJMessageCommandException();
-        } else if (builder.startTime == null) {
-            throw new NullSCFJMessageStartTimeException();
         }
         this.command = builder.command;
-        this.startTime = builder.startTime;
+        this.startTime = builder.startTime != null ? builder.startTime : System.currentTimeMillis();
     }
 
     /**
      * Returns the command of the SCFJMessage.
+     *
      * @return {@link String} the command of the SCFJMessage.
      */
     public String getCommand() {
@@ -33,6 +31,7 @@ public class SCFJMessage {
 
     /**
      * Returns the start time of the SCFJMessage.
+     *
      * @return {@link Long} the start time of the SCFJMessage.
      */
     public Long getStartTime() {
@@ -41,6 +40,7 @@ public class SCFJMessage {
 
     /**
      * Returns the SCFJMessage object as a String.
+     *
      * @return {@link String} the SCFJMessage object as a String.
      */
     @Override
@@ -59,10 +59,12 @@ public class SCFJMessage {
         /**
          * Constructor
          */
-        public Builder() {}
+        public Builder() {
+        }
 
         /**
          * Sets the command of the {@link SCFJMessage}.
+         *
          * @param command {@link String} the command of the {@link SCFJMessage}.
          * @return the Builder object.
          */
@@ -73,6 +75,7 @@ public class SCFJMessage {
 
         /**
          * Sets the start time of the {@link SCFJMessage}.
+         *
          * @param startTime {@link Long} the start time of the {@link SCFJMessage}.
          * @return the Builder object.
          */
@@ -83,6 +86,7 @@ public class SCFJMessage {
 
         /**
          * Builds the {@link SCFJMessage} object.
+         *
          * @return a {@link SCFJMessage} object.
          */
         public SCFJMessage build() {

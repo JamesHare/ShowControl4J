@@ -16,6 +16,7 @@ public class NullBrokerConnectionFactoryException extends RuntimeException {
 
     /**
      * Constructor.
+     *
      * @param message the message for the exception.
      */
     public NullBrokerConnectionFactoryException(String message) {

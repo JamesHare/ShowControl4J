@@ -16,6 +16,7 @@ public class NullSCFJMessageCommandException extends RuntimeException {
 
     /**
      * Constructor.
+     *
      * @param message the message for the exception.
      */
     public NullSCFJMessageCommandException(String message) {

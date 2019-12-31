@@ -115,7 +115,7 @@ public class TestShowElementBase {
         try {
             testShowElementBase.pause(1000);
         } catch (InterruptedException e) {
-            System.out.println("An error occured while pausing the Show Element. " + e);
+            System.out.println("An error occurred while pausing the Show Element. " + e);
         }
         long timeStampTwo = System.currentTimeMillis();
         long totalPaused = timeStampTwo - timeStampOne;

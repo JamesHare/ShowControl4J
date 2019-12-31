@@ -88,7 +88,7 @@ public abstract class ShowElementBase implements ShowElement {
 
     private void handleMessage(SCFJMessage message) {
         if (message.getCommand().equalsIgnoreCase("ERROR")) {
-            System.out.println("An error occured while handling the show command.");
+            System.out.println("An error occurred while handling the show command.");
         } else if (message.getCommand().equalsIgnoreCase("GO")) {
             runLoop(message);
         } else if (message.getCommand().equalsIgnoreCase("STOP")) {

@@ -1,7 +1,5 @@
 @startuml
 
-title __SHOWCONTROL4J-ELEMENT's Class Diagram__\n
-
   namespace com.showcontrol4j.element {
     interface com.showcontrol4j.element.ShowElement {
     }

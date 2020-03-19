@@ -1,7 +1,5 @@
 @startuml
 
-title __SHOWCONTROL4J-CORE's Class Diagram__\n
-
   namespace com.showcontrol4j.broker {
     class com.showcontrol4j.broker.BrokerConnectionFactory {
     }

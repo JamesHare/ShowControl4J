@@ -1,7 +1,5 @@
 @startuml
 
-title __SHOWCONTROL4J-TRIGGER's Class Diagram__\n
-
   namespace com.showcontrol4j.trigger {
     interface com.showcontrol4j.trigger.ShowTrigger {
     }

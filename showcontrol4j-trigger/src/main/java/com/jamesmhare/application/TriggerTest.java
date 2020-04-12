@@ -8,11 +8,12 @@ public class TriggerTest {
 
     public static void main(String[] args) {
 
-        BrokerConnectionFactory broker = new BrokerConnectionFactory.Builder().withHostname("localhost").build();
+        BrokerConnectionFactory broker = new BrokerConnectionFactory.Builder().withHostname("192.168.1.10").withCredentials("admin", "test").build();
         MessageExchange queue = new MessageExchange.Builder().withName("test").build();
 
-        KeyboardEventTrigger keyboardEventTrigger = new KeyboardEventTrigger("go", "Test", 1L, 15000L, queue, broker);
+        KeyboardEventTrigger keyboardEventTrigger = new KeyboardEventTrigger("go", "Test-Trigger", 1L, 10000L, queue, broker);
         System.out.println("STARTING" + keyboardEventTrigger.toString());
+        keyboardEventTrigger.startListener();
 
     }
 

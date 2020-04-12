@@ -35,6 +35,7 @@ public abstract class ShowElementBase implements ShowElement {
     private final BrokerConnectionFactory brokerConnectionFactory;
     private final ExecutorService executor;
     private Future runningFuture;
+    private Future newFuture;
 
     /**
      * The constructor for a {@link ShowElementBase} object.
@@ -84,7 +85,14 @@ public abstract class ShowElementBase implements ShowElement {
         });
     }
 
-    private void handleMessage(SCFJMessage message) {
+    protected void handleMessage(SCFJMessage message) {
+        while (message.getStartTime() > System.currentTimeMillis()) {
+            try {
+                pause(100);
+            } catch (InterruptedException e) {
+                System.out.println("Sleeping was interrupted. " + e);
+            }
+        }
         if (runningFuture != null) {
             runningFuture.cancel(true);
         }
@@ -105,13 +113,6 @@ public abstract class ShowElementBase implements ShowElement {
     }
 
     private void runLoop(SCFJMessage message) {
-        while (message.getStartTime() > System.currentTimeMillis()) {
-            try {
-                pause(100);
-            } catch (InterruptedException e) {
-                System.out.println("Sleeping was interrupted. " + e);
-            }
-        }
         try {
             showSequence();
             runIdle(new SCFJMessage.Builder().withCommand("IDLE").withStartTime(System.currentTimeMillis()).build());
@@ -121,13 +122,6 @@ public abstract class ShowElementBase implements ShowElement {
     }
 
     private void runIdle(SCFJMessage message) {
-        while (message.getStartTime() > System.currentTimeMillis()) {
-            try {
-                pause(100);
-            } catch (InterruptedException e) {
-                System.out.println("Sleeping was interrupted. " + e);
-            }
-        }
         try {
             while (true) {
                 idleLoop();
@@ -139,6 +133,7 @@ public abstract class ShowElementBase implements ShowElement {
 
     private void runStop() {
         runningFuture = null;
+        newFuture = null;
         executor.shutdownNow();
         shutdownProcedure();
     }

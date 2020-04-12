@@ -1,13 +1,11 @@
 package com.showcontrol4j.element.raspberrypi.led;
 
-import com.pi4j.io.gpio.GpioFactory;
-import com.pi4j.io.gpio.GpioPinDigitalOutput;
-import com.pi4j.io.gpio.Pin;
-import com.pi4j.io.gpio.PinState;
+import com.pi4j.io.gpio.*;
 import com.showcontrol4j.broker.BrokerConnectionFactory;
 import com.showcontrol4j.element.ShowElementBase;
 import com.showcontrol4j.exception.NullPinException;
 import com.showcontrol4j.exchange.MessageExchange;
+import com.showcontrol4j.message.SCFJMessage;
 
 import java.util.concurrent.TimeUnit;
 
@@ -20,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 public abstract class LEDShowElement extends ShowElementBase {
 
     private final GpioPinDigitalOutput LED;
+    private final GpioController gpioController;
 
     /**
      * Constructor for an LED Show Element.
@@ -34,8 +33,10 @@ public abstract class LEDShowElement extends ShowElementBase {
         if (pin == null) {
             throw new NullPinException();
         }
-        LED = GpioFactory.getInstance().provisionDigitalOutputPin(pin, NAME, PinState.LOW);
+        gpioController = GpioFactory.getInstance();
+        LED = gpioController.provisionDigitalOutputPin(pin, NAME, PinState.LOW);
         LED.setShutdownOptions(true, PinState.LOW);
+        handleMessage(new SCFJMessage.Builder().withCommand("IDLE").build());
     }
 
     /**
@@ -57,7 +58,7 @@ public abstract class LEDShowElement extends ShowElementBase {
      */
     @Override
     protected void shutdownProcedure() {
-        // TODO fill these out for an LED.
+        gpioController.shutdown();
     }
 
     /**

@@ -84,7 +84,14 @@ public abstract class ShowElementBase implements ShowElement {
         });
     }
 
-    private void handleMessage(SCFJMessage message) {
+    protected void handleMessage(SCFJMessage message) {
+        while (message.getStartTime() > System.currentTimeMillis()) {
+            try {
+                pause(100);
+            } catch (InterruptedException e) {
+                System.out.println("Sleeping was interrupted. " + e);
+            }
+        }
         if (runningFuture != null) {
             runningFuture.cancel(true);
         }
@@ -105,13 +112,6 @@ public abstract class ShowElementBase implements ShowElement {
     }
 
     private void runLoop(SCFJMessage message) {
-        while (message.getStartTime() > System.currentTimeMillis()) {
-            try {
-                pause(100);
-            } catch (InterruptedException e) {
-                System.out.println("Sleeping was interrupted. " + e);
-            }
-        }
         try {
             showSequence();
             runIdle(new SCFJMessage.Builder().withCommand("IDLE").withStartTime(System.currentTimeMillis()).build());
@@ -121,13 +121,6 @@ public abstract class ShowElementBase implements ShowElement {
     }
 
     private void runIdle(SCFJMessage message) {
-        while (message.getStartTime() > System.currentTimeMillis()) {
-            try {
-                pause(100);
-            } catch (InterruptedException e) {
-                System.out.println("Sleeping was interrupted. " + e);
-            }
-        }
         try {
             while (true) {
                 idleLoop();

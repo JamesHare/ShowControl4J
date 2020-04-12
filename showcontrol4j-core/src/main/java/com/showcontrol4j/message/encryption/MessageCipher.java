@@ -1,5 +1,6 @@
 package com.showcontrol4j.message.encryption;
 
+import com.showcontrol4j.exchange.MessageExchange;
 import com.showcontrol4j.message.SCFJMessage;
 
 import javax.crypto.BadPaddingException;
@@ -21,6 +22,9 @@ import java.util.Base64;
  * @author James Hare
  */
 public class MessageCipher {
+
+    // private constructor so that the class cannot be instantiated.
+    private MessageCipher() {}
 
     /**
      * Encrypts a {@link SCFJMessage} to an encrypted String.

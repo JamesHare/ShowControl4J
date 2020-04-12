@@ -50,6 +50,17 @@ public class TestShowCommand {
     }
 
     @Test
+    public void testIdle() {
+        long currentTime = System.currentTimeMillis();
+        String testCommand = ShowCommand.IDLE();
+        String[] testCommandArr = testCommand.split(":");
+        assertEquals(IDLE, testCommandArr[0]);
+        long startTime = Long.parseLong(testCommandArr[1]);
+        assertTrue(startTime > currentTime - 100);
+        assertTrue(startTime < currentTime + 100);
+    }
+
+    @Test
     public void testIdle_withSyncTimeout() {
         long currentTime = System.currentTimeMillis();
         String testCommand = ShowCommand.IDLE(10000L);
@@ -63,7 +74,7 @@ public class TestShowCommand {
     @Test
     public void testIdle_nullSyncTimeout() {
         long currentTime = System.currentTimeMillis();
-        String testCommand = ShowCommand.IDLE();
+        String testCommand = ShowCommand.IDLE(null);
         String[] testCommandArr = testCommand.split(":");
         assertEquals(IDLE, testCommandArr[0]);
         long startTime = Long.parseLong(testCommandArr[1]);

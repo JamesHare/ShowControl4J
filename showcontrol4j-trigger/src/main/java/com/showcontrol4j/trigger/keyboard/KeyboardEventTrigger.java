@@ -19,7 +19,7 @@ public class KeyboardEventTrigger extends ShowTriggerBase {
     }
 
     @Override
-    protected void startListener() {
+    public void startListener() {
         while (true) {
             try {
                 String entry = SCANNER.next();

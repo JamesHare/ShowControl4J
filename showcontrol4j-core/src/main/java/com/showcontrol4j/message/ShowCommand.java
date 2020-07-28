@@ -7,6 +7,9 @@ package com.showcontrol4j.message;
  */
 public class ShowCommand {
 
+    // private constructor so that the class cannot be instantiated.
+    private ShowCommand() {}
+
     /**
      * Creates a {@link SCFJMessage} object with the GO show command. Accepts a parameter to specify a time
      * in milliseconds to wait before the show loop is started. This allows for better show syncing if a

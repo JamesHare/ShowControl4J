@@ -21,9 +21,15 @@ public class BrokerConnectionFactory {
         if (builder.HOSTNAME == null) {
             throw new NullBrokerHostException();
         }
-        HOSTNAME = builder.HOSTNAME;
         CONNECTION_FACTORY = new ConnectionFactory();
+        HOSTNAME = builder.HOSTNAME;
         CONNECTION_FACTORY.setHost(HOSTNAME);
+        if (builder.USERNAME != null) {
+            CONNECTION_FACTORY.setUsername(builder.USERNAME);
+        }
+        if (builder.PASSWORD != null) {
+            CONNECTION_FACTORY.setPassword(builder.PASSWORD);
+        }
     }
 
     /**
@@ -52,6 +58,8 @@ public class BrokerConnectionFactory {
     public static class Builder {
 
         private String HOSTNAME;
+        private String USERNAME;
+        private String PASSWORD;
 
         /**
          * Constructor
@@ -67,6 +75,19 @@ public class BrokerConnectionFactory {
          */
         public Builder withHostname(String hostname) {
             this.HOSTNAME = hostname;
+            return this;
+        }
+
+        /**
+         * Sets the credentials used to make a connection to the broker, if necessary.
+         *
+         * @param username the username used to make a connection to the broker.
+         * @param password the password used to make a connection to the broker.
+         * @return the Builder object.
+         */
+        public Builder withCredentials(String username, String password) {
+            this.USERNAME = username;
+            this.PASSWORD = password;
             return this;
         }
 

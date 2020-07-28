@@ -29,6 +29,8 @@ public class TestBrokerConnectionFactory {
     @Rule
     public ExpectedException exception = ExpectedException.none();
     private final String HOSTNAME = "test";
+    private final String USERNAME = "testusername";
+    private final String PASSWORD = "testpassword";
 
     @Mock
     ConnectionFactory mockConnectionFactory;
@@ -43,7 +45,7 @@ public class TestBrokerConnectionFactory {
     @Test
     public void testConstructor() {
         BrokerConnectionFactory testBrokerConnectionFactory = new BrokerConnectionFactory.Builder()
-                .withHostname(HOSTNAME).build();
+                .withHostname(HOSTNAME).withCredentials(USERNAME, PASSWORD).build();
         assertThat(testBrokerConnectionFactory, instanceOf(BrokerConnectionFactory.class));
     }
 
@@ -62,9 +64,35 @@ public class TestBrokerConnectionFactory {
     }
 
     @Test
-    public void testNewConnection() throws Exception {
+    public void testConstructor_withCredentials() throws Exception {
+        BrokerConnectionFactory testBrokerConnectionFactory = new BrokerConnectionFactory.Builder()
+                .withHostname(HOSTNAME).withCredentials(USERNAME, PASSWORD).build();
+
+        Field factoryField = testBrokerConnectionFactory.getClass().getDeclaredField("CONNECTION_FACTORY");
+        factoryField.setAccessible(true);
+        ConnectionFactory connectionFactory = (ConnectionFactory) factoryField.get(testBrokerConnectionFactory);
+
+        assertEquals(USERNAME, connectionFactory.getUsername());
+        assertEquals(PASSWORD, connectionFactory.getPassword());
+    }
+
+    @Test
+    public void testConstructor_nullCredentials() throws Exception {
         BrokerConnectionFactory testBrokerConnectionFactory = new BrokerConnectionFactory.Builder()
                 .withHostname(HOSTNAME).build();
+
+        Field factoryField = testBrokerConnectionFactory.getClass().getDeclaredField("CONNECTION_FACTORY");
+        factoryField.setAccessible(true);
+        ConnectionFactory connectionFactory = (ConnectionFactory) factoryField.get(testBrokerConnectionFactory);
+
+        assertEquals("guest", connectionFactory.getUsername());
+        assertEquals("guest", connectionFactory.getPassword());
+    }
+
+    @Test
+    public void testNewConnection() throws Exception {
+        BrokerConnectionFactory testBrokerConnectionFactory = new BrokerConnectionFactory.Builder()
+                .withHostname(HOSTNAME).withCredentials(USERNAME, PASSWORD).build();
         Field connectionFactoryField = testBrokerConnectionFactory.getClass().getDeclaredField("CONNECTION_FACTORY");
         connectionFactoryField.setAccessible(true);
         connectionFactoryField.set(testBrokerConnectionFactory, mockConnectionFactory);

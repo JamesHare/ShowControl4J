@@ -18,6 +18,7 @@ import org.junit.rules.ExpectedException;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.concurrent.ExecutorService;
@@ -435,6 +436,89 @@ public class TestShowElementBase {
 
         assertTrue(ranShowSequence[0]);
         assertTrue(ranIdleLoop[0]);
+
+        shutdownExecutorOnShowElementBase(testShowElementBase);
+    }
+
+    @Test
+    public void testHandleMessage_goMessageTwoMessages() throws Exception {
+        when(mockBrokerConnectionFactory.newConnection()).thenReturn(mockConnection);
+        when(mockConnection.createChannel()).thenReturn(mockChannel);
+        when(mockChannel.exchangeDeclare(anyString(), anyString())).thenReturn(mockExchangeDeclareOk);
+        when(mockChannel.queueDeclare()).thenReturn(mockQueueDeclareOk);
+        when(mockQueueDeclareOk.getQueue()).thenReturn("test");
+        when(mockChannel.queueBind(anyString(), anyString(), anyString())).thenReturn(mockBindOk);
+
+        int[] showSequenceCounter = {0};
+
+        ShowElementBase testShowElementBase = new ShowElementBase(NAME, ID, mockMessageExchange, mockBrokerConnectionFactory) {
+            @Override
+            public void showSequence() throws InterruptedException {
+                int count = showSequenceCounter[0];
+                count++;
+                showSequenceCounter[0] = count;
+            }
+
+            @Override
+            public void idleLoop() throws InterruptedException {
+                // do nothing
+            }
+
+            @Override
+            public void shutdownProcedure() {
+                // do nothing
+            }
+        };
+
+        executor.submit(new TestTask(testShowElementBase, testGoSCFJMessage));
+        TimeUnit.MILLISECONDS.sleep(1000);
+
+        assertEquals(1, showSequenceCounter[0]);
+
+        executor.submit(new TestTask(testShowElementBase, testGoSCFJMessage));
+        TimeUnit.MILLISECONDS.sleep(1000);
+
+        assertEquals(2, showSequenceCounter[0]);
+
+        shutdownExecutorOnShowElementBase(testShowElementBase);
+    }
+
+    @Test
+    public void testHandleMessage_goMessageWithStartTime() throws Exception {
+        when(mockBrokerConnectionFactory.newConnection()).thenReturn(mockConnection);
+        when(mockConnection.createChannel()).thenReturn(mockChannel);
+        when(mockChannel.exchangeDeclare(anyString(), anyString())).thenReturn(mockExchangeDeclareOk);
+        when(mockChannel.queueDeclare()).thenReturn(mockQueueDeclareOk);
+        when(mockQueueDeclareOk.getQueue()).thenReturn("test");
+        when(mockChannel.queueBind(anyString(), anyString(), anyString())).thenReturn(mockBindOk);
+
+        boolean[] ranShowSequence = {false};
+        final SCFJMessage testGoSCFJMessageWithStartTime = new SCFJMessage.Builder().withCommand("GO").withStartTime(System.currentTimeMillis() + 5000L).build();
+
+        ShowElementBase testShowElementBase = new ShowElementBase(NAME, ID, mockMessageExchange, mockBrokerConnectionFactory) {
+            @Override
+            public void showSequence() throws InterruptedException {
+                ranShowSequence[0] = true;
+            }
+
+            @Override
+            public void idleLoop() throws InterruptedException {
+                // do nothing
+            }
+
+            @Override
+            public void shutdownProcedure() {
+                // do nothing
+            }
+        };
+
+        executor.submit(new TestTask(testShowElementBase, testGoSCFJMessageWithStartTime));
+        TimeUnit.MILLISECONDS.sleep(1000);
+        assertFalse(ranShowSequence[0]);
+        TimeUnit.MILLISECONDS.sleep(5000); // wait for start time
+        assertTrue(ranShowSequence[0]);
+
+        shutdownExecutorOnShowElementBase(testShowElementBase);
     }
 
     @Test
@@ -469,6 +553,46 @@ public class TestShowElementBase {
         TimeUnit.MILLISECONDS.sleep(1000);
 
         assertTrue(ranIdleLoop[0]);
+
+        shutdownExecutorOnShowElementBase(testShowElementBase);
+    }
+
+    @Test
+    public void testHandleMessage_idleMessageWithStartTime() throws Exception {
+        when(mockBrokerConnectionFactory.newConnection()).thenReturn(mockConnection);
+        when(mockConnection.createChannel()).thenReturn(mockChannel);
+        when(mockChannel.exchangeDeclare(anyString(), anyString())).thenReturn(mockExchangeDeclareOk);
+        when(mockChannel.queueDeclare()).thenReturn(mockQueueDeclareOk);
+        when(mockQueueDeclareOk.getQueue()).thenReturn("test");
+        when(mockChannel.queueBind(anyString(), anyString(), anyString())).thenReturn(mockBindOk);
+
+        boolean[] ranIdleLoop = {false};
+        SCFJMessage testIdleSCFJMessageWithStartTime = new SCFJMessage.Builder().withCommand("IDLE").withStartTime(System.currentTimeMillis() + 5000L).build();
+
+        ShowElementBase testShowElementBase = new ShowElementBase(NAME, ID, mockMessageExchange, mockBrokerConnectionFactory) {
+            @Override
+            public void showSequence() throws InterruptedException {
+                // do nothing
+            }
+
+            @Override
+            public void idleLoop() throws InterruptedException {
+                ranIdleLoop[0] = true;
+            }
+
+            @Override
+            public void shutdownProcedure() {
+                // do nothing
+            }
+        };
+
+        executor.submit(new TestTask(testShowElementBase, testIdleSCFJMessageWithStartTime));
+        TimeUnit.MILLISECONDS.sleep(1000);
+        assertFalse(ranIdleLoop[0]);
+        TimeUnit.MILLISECONDS.sleep(5000); // wait for start time
+        assertTrue(ranIdleLoop[0]);
+
+        shutdownExecutorOnShowElementBase(testShowElementBase);
     }
 
     @Test
@@ -503,6 +627,46 @@ public class TestShowElementBase {
         TimeUnit.MILLISECONDS.sleep(1000);
 
         assertTrue(ranShutdownProcedure[0]);
+
+        shutdownExecutorOnShowElementBase(testShowElementBase);
+    }
+
+    @Test
+    public void testHandleMessage_stopMessageWithStartTime() throws Exception {
+        when(mockBrokerConnectionFactory.newConnection()).thenReturn(mockConnection);
+        when(mockConnection.createChannel()).thenReturn(mockChannel);
+        when(mockChannel.exchangeDeclare(anyString(), anyString())).thenReturn(mockExchangeDeclareOk);
+        when(mockChannel.queueDeclare()).thenReturn(mockQueueDeclareOk);
+        when(mockQueueDeclareOk.getQueue()).thenReturn("test");
+        when(mockChannel.queueBind(anyString(), anyString(), anyString())).thenReturn(mockBindOk);
+
+        boolean[] ranShutdownProcedure = {false};
+        SCFJMessage testStopSCFJMessageWithStartTime = new SCFJMessage.Builder().withCommand("STOP").withStartTime(System.currentTimeMillis() + 5000L).build();
+
+        ShowElementBase testShowElementBase = new ShowElementBase(NAME, ID, mockMessageExchange, mockBrokerConnectionFactory) {
+            @Override
+            public void showSequence() throws InterruptedException {
+                // do nothing
+            }
+
+            @Override
+            public void idleLoop() throws InterruptedException {
+                // do nothing
+            }
+
+            @Override
+            public void shutdownProcedure() {
+                ranShutdownProcedure[0] = true;
+            }
+        };
+
+        executor.submit(new TestTask(testShowElementBase, testStopSCFJMessageWithStartTime));
+        TimeUnit.MILLISECONDS.sleep(1000);
+        assertFalse(ranShutdownProcedure[0]);
+        TimeUnit.MILLISECONDS.sleep(5000); // wait for start time
+        assertTrue(ranShutdownProcedure[0]);
+
+        shutdownExecutorOnShowElementBase(testShowElementBase);
     }
 
     @Test
@@ -537,21 +701,67 @@ public class TestShowElementBase {
         TimeUnit.MILLISECONDS.sleep(1000);
 
         assertTrue(ranIdleLoop[0]);
+
+        shutdownExecutorOnShowElementBase(testShowElementBase);
+    }
+
+    @Test
+    public void testHandleMessage_errorMessageWithStartTime() throws Exception {
+        when(mockBrokerConnectionFactory.newConnection()).thenReturn(mockConnection);
+        when(mockConnection.createChannel()).thenReturn(mockChannel);
+        when(mockChannel.exchangeDeclare(anyString(), anyString())).thenReturn(mockExchangeDeclareOk);
+        when(mockChannel.queueDeclare()).thenReturn(mockQueueDeclareOk);
+        when(mockQueueDeclareOk.getQueue()).thenReturn("test");
+        when(mockChannel.queueBind(anyString(), anyString(), anyString())).thenReturn(mockBindOk);
+
+        boolean[] ranIdleLoop = {false};
+        SCFJMessage testErrorSCFJMessageWithStartTime = new SCFJMessage.Builder().withCommand("ERROR").withStartTime(System.currentTimeMillis() + 5000L).build();
+
+        ShowElementBase testShowElementBase = new ShowElementBase(NAME, ID, mockMessageExchange, mockBrokerConnectionFactory) {
+            @Override
+            public void showSequence() throws InterruptedException {
+                // do nothing
+            }
+
+            @Override
+            public void idleLoop() throws InterruptedException {
+                ranIdleLoop[0] = true;
+            }
+
+            @Override
+            public void shutdownProcedure() {
+                // do nothing
+            }
+        };
+
+        executor.submit(new TestTask(testShowElementBase, testErrorSCFJMessageWithStartTime));
+        TimeUnit.MILLISECONDS.sleep(1000);
+        assertFalse(ranIdleLoop[0]);
+        TimeUnit.MILLISECONDS.sleep(5000); // wait for start time
+        assertTrue(ranIdleLoop[0]);
+
+        shutdownExecutorOnShowElementBase(testShowElementBase);
     }
 
     //------------------------------------ HELPER METHODS ------------------------------------//
 
     private static Method getHandleMessageMethod() {
-        Class[] params = new Class[1];
-        params[0] = SCFJMessage.class;
         Method handleMessageMethod = null;
         try {
-            handleMessageMethod = ShowElementBase.class.getDeclaredMethod("analyzeMessage", SCFJMessage.class);
+            handleMessageMethod = ShowElementBase.class.getDeclaredMethod("handleMessage", SCFJMessage.class);
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
+        assert handleMessageMethod != null;
         handleMessageMethod.setAccessible(true);
         return handleMessageMethod;
+    }
+
+    private static void shutdownExecutorOnShowElementBase(ShowElementBase showElementBase) throws Exception {
+        Field executorField = ShowElementBase.class.getDeclaredField("executor");
+        executorField.setAccessible(true);
+        ExecutorService executorService = (ExecutorService) executorField.get(showElementBase);
+        executorService.shutdownNow();
     }
 
     private class TestTask implements Runnable {

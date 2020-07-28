@@ -41,7 +41,7 @@ public abstract class ShowTriggerBase implements ShowTrigger {
         try {
             registerShowTrigger();
         } catch (IOException | TimeoutException e) {
-            System.out.println("An error occurred while registering the show element. " + e);
+            System.out.println("An error occurred while registering the show element. " + e.getCause());
         }
     }
 

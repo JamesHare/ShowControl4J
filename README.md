@@ -1,3 +1,5 @@
+**Important: this project has been deprecated and is now being released to the open source community. More info can be found [here](https://github.com/ShowControl4J/showcontrol4j).**
+
 # ShowControl4J
 ShowControl4J is an open sourced, mavenized Java library for controlling show elements with a variety of microcontrollers.
 

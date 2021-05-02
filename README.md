@@ -3,7 +3,7 @@
 # ShowControl4J
 ShowControl4J is an open sourced, mavenized Java library for controlling show elements with a variety of microcontrollers.
 
-Master: [![Build Status](https://travis-ci.com/JamesHare/ShowControl4J.svg?branch=master)](https://travis-ci.com/JamesHare/ShowControl4J) [![Coverage Status](https://coveralls.io/repos/github/JamesHare/ShowControl4J/badge.svg?branch=SCFJ-10008)](https://coveralls.io/github/JamesHare/ShowControl4J?branch=SCFJ-10008)
+Master: [![Build Status](https://travis-ci.com/JamesHare/ShowControl4J.svg?branch=master)](https://travis-ci.com/JamesHare/ShowControl4J)
 
 
 # Author

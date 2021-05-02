@@ -20,7 +20,7 @@ ShowControl4J provides a mechanism to connect Show Elements (common microcontrol
 ## Investigation
 This project bridges a gap in connecting microcontrollers together to better synchronize elements of a themed attraction and provide a better overall experience. By using RabbitMQ and common Java libraries for microcontrollers, it will be possible to send GO, IDLE and STOP commands to Show Elements from Show Triggers as Messages.
 
-## Prerequisits
+## Prerequisites
 
 -- [RabbitMQ-Server](https://www.rabbitmq.com/download.html) must be installed and running on a node that is part of the network.
 
